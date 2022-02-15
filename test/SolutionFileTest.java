@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SolutionFileTest {
@@ -167,6 +168,8 @@ public class SolutionFileTest {
 
         List<String> answer = solutionF.getAnswer(clientPreferencesList);
 
+        createOutputFile(answer, fileName.replace("resources", "output"));
+
         long score = clientPreferencesList.stream()
                                           .filter(preferences -> willEatPizza(preferences, answer))
                                           .count();
@@ -208,5 +211,18 @@ public class SolutionFileTest {
         }
 
         return clientPreferencesList;
+    }
+
+    void createOutputFile(List<String> answer, String filename) {
+        try {
+            PrintWriter writer = new PrintWriter(filename, "UTF-8");
+
+            writer.println(answer.size() + " " + answer.stream().collect(Collectors.joining(" ")));
+
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
     }
 }
